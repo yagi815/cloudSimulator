@@ -1,11 +1,13 @@
 package SimulatorMain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.rmi.CORBA.Util;
 import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import MachineContainer.HostMachine;
@@ -83,8 +85,27 @@ public class SimManager implements Runnable {
 		System.out.println("Policy Reading...... complete.");
 	}
 	
+	private boolean resizeHostMachine( int length ){
+		try {
+			int oldSize = this.maxHost;
+			
+			mainHostContainer = Arrays.copyOf(mainHostContainer, mainHostContainer.length + length);
+			this.maxHost = mainHostContainer.length;
+			
+			for (int i = oldSize; i < this.maxHost; i++) {
+				mainHostContainer[i] = new HostMachine(String.format("host%02d",i + 1));
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 	
-	public void initSimulator() {
+	private  void initSimulator() {
 		
 		mainHostContainer = new HostMachine[maxHost];
 		for (int i = 0; i < maxHost; i++) {
@@ -99,6 +120,8 @@ public class SimManager implements Runnable {
 			createNewVirtualMachine((String)vmList.get(i));
 		}
 	}
+	
+
 
 
 	// ******************************************************************
@@ -263,7 +286,9 @@ public class SimManager implements Runnable {
 	}
 
 	/**
-	 * Desc : 새로운 가상머신 추가
+	 * Desc : 새로운 가상머신 추가 
+	 * <br>파라미터에 가상머신이름이 들어오면 해당 머신으로 생성하고 
+	 * <br>그렇지 않으면 가용한 리스트의 첫번째에 가상머신을 ㅎ생성한다. 
 	 * 
 	 * @Method Name : addVirtualMachine
 	 * @param virtualMachine
@@ -277,12 +302,21 @@ public class SimManager implements Runnable {
 		String[] tmp = new String[2];
 		tmp = virtualMachine.split("[-]");
 		String hName = tmp[0];
-//		String vName = tmp[1];
-		if (!isContainVirtualMachine(virtualMachine)) {
-			host = mainHostContainer[getHostIndex(hName)];
-			host.addVM(virtualMachine);
-			return "1";
+
+		host = mainHostContainer[getHostIndex(hName)];
+		
+		
+		if (virtualMachine.equals("-")) {			
+			List alist = getAvaiableVmList();
+			host.addVM((String)alist.get(0));
+		}else {			
+			if (!isContainVirtualMachine(virtualMachine)) {
+				host.addVM(virtualMachine);
+				return "1";
+			}
 		}
+		
+		
 		return "-1";
 	}
 

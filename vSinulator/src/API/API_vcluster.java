@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.AbstractDocument.BranchElement;
+
 
 
 /**
@@ -134,7 +136,7 @@ public class API_vcluster {
 	 */
 	public List getAvailableHostList() {
 		List availableHostList = new ArrayList();
-		availableHostList = (List) requestToSimulator("03:nothing");
+		availableHostList = (List) requestToSimulator("03:-");
 		return availableHostList;
 	}
 
@@ -147,7 +149,7 @@ public class API_vcluster {
 	 * 
 	 */
 	public String getCloudName() {
-		return (String) requestToSimulator("04:nothing");
+		return (String) requestToSimulator("04:-");
 	}
 
 	/**
@@ -158,7 +160,7 @@ public class API_vcluster {
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public String getHostList() {
-		return (String) requestToSimulator("05:nothing");
+		return (String) requestToSimulator("05:-");
 	}
 
 	// ******************************************************************
@@ -170,14 +172,13 @@ public class API_vcluster {
 	 * 
 	 * @Method Name : createNewVirtualMachine
 	 * @param virtualMachine
-	 *            생성할 가상머신이름 EX) "host03-vm03"
+	 *            생성할 가상머신이름 EX) "host03-vm03" <br> parameter가 "-" 이면, 앞에서 순차적으로 생성됨	 *           
 	 * @return 성공하면 "1", 실패하면 "-1"
 	 * 
 	 */
 	public String createNewVirtualMachine(String virtualMachine) {		
 		return (String) requestToSimulator("20:" + virtualMachine);
 	}
-
 	/**
 	 * Desc : 삭제할 가상머신을 생성한다.
 	 * 
@@ -507,7 +508,7 @@ public class API_vcluster {
 	 * @return 클라우드 상태를 출력 한다.
 	 * 
 	 */
-	public void dumpCloudStatus() {
+	public void showHost(String hostName) {
 		System.out.println("dumpCloudStatus....");
 		String dumpCloudStatsus = "";
 
@@ -539,7 +540,7 @@ public class API_vcluster {
 
 		// return dumpCloudStatsus;
 	}
-	public void discribeVm(String virtualMachine){
+	public void showVM(String virtualMachine){
 		String dumpCloudStatus="";
 		dumpCloudStatus +="[ ID="+getVMUUID(virtualMachine) +"\n"
 		+" Status="+getVmStatus(virtualMachine) +"\n"
@@ -548,9 +549,9 @@ public class API_vcluster {
 		+" Busy="+getVMBusy(virtualMachine) +" ]";
 		System.out.println(dumpCloudStatus);
 	}
-
-	public static void main(String[] args) {
-//		new API_vcluster().dumpCloudStatus();
-//		requestToSimulator("00:hello");
+	public void showCloud(){
+		
 	}
+
+	
 }
