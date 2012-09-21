@@ -65,7 +65,7 @@ public class ExecuteCommand {
 			returnObj  =	simManager.migrationVirtualMachine(tmp[0],tmp[1]);
 			break;			
 		case 23:
-			returnObj  =	simManager.getRunningVmList();			
+			returnObj  =	simManager.getRunningVmList(parameter);			
 			break;
 		case 24:
 			returnObj  =	simManager.getAvaiableVmList();			

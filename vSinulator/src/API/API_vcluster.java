@@ -218,9 +218,9 @@ public class API_vcluster {
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 * 
 	 */
-	public List getRunningVmList() {
+	public List getRunningVmList(String hostName) {
 		List runningVmList = new ArrayList();
-		runningVmList = (List) requestToSimulator("23:nothing");
+		runningVmList = (List) requestToSimulator("23:"+hostName);
 		return runningVmList;
 	}
 
@@ -509,12 +509,41 @@ public class API_vcluster {
 	 * 
 	 */
 	public void showHost(String hostName) {
-		System.out.println("dumpCloudStatus....");
+		System.out.println("hostStatus....");
 		String dumpCloudStatsus = "";
 
-		// System.out.println("kdjflk");
-		List busyVmList = getBusyVmList();
-		List runningVmList = getRunningVmList();
+		dkdjdj
+
+		List runningVmList = getRunningVmList(hostName);
+
+		
+		
+		dumpCloudStatsus += "\n===================================================================\n";
+		dumpCloudStatsus +="--------------running Vm list --------------\n";
+		
+		for (int i = 0; i < runningVmList.size(); i++) {
+			dumpCloudStatsus += (String) runningVmList.get(i) + "\n";
+		}
+		dumpCloudStatsus +="-------------- job running Vm list --------------\n";
+		
+		dumpCloudStatsus += "\n===================================================================\n";
+		System.out.println(dumpCloudStatsus);
+
+		// return dumpCloudStatsus;
+	}
+	public void showVM(String virtualMachine){
+		String dumpCloudStatus="";
+		dumpCloudStatus +="[ ID="+getVMUUID(virtualMachine) +"\n"
+		+" Status="+getVmStatus(virtualMachine) +"\n"
+		+" Cpu="+getVMCpuInfo(virtualMachine) +"\n"
+		+" OS="+getVMOSInfo(virtualMachine) +"\n"
+		+" Disk="+getVMDiskInfo(virtualMachine) +"\n"		
+		+" Busy="+getVMBusy(virtualMachine) +" ]";
+		System.out.println(dumpCloudStatus);
+	}
+	public void showCloud(){
+		System.out.println("dumpCloudStatus....");
+		String dumpCloudStatsus = "";
 
 		dumpCloudStatsus += "====================================================================\n"
 				+ "total VMs :"
@@ -526,31 +555,8 @@ public class API_vcluster {
 				+ "\ttotal idle VMs :"
 				+ getIdleVmList().size() + "\n";
 		dumpCloudStatsus += "\n===================================================================\n";
-		dumpCloudStatsus +="--------------running Vm list --------------\n";
-		for (int i = 0; i < runningVmList.size(); i++) {
-			dumpCloudStatsus += (String) runningVmList.get(i) + "\n";
-		}
-		dumpCloudStatsus +="-------------- job running Vm list --------------\n";
-		for (int i = 0; i < busyVmList.size(); i++) {
-			dumpCloudStatsus += (String) busyVmList.get(i) +"\n";
-		}
-		dumpCloudStatsus += "\n===================================================================\n";
-
-		System.out.println(dumpCloudStatsus);
-
-		// return dumpCloudStatsus;
-	}
-	public void showVM(String virtualMachine){
-		String dumpCloudStatus="";
-		dumpCloudStatus +="[ ID="+getVMUUID(virtualMachine) +"\n"
-		+" Status="+getVmStatus(virtualMachine) +"\n"
-		+" Cpu="+getVMCpuInfo(virtualMachine) +"\n"
-		+" OS="+getVMOSInfo(virtualMachine) +"\n"
-		+" Busy="+getVMBusy(virtualMachine) +" ]";
-		System.out.println(dumpCloudStatus);
-	}
-	public void showCloud(){
 		
+		System.out.println(dumpCloudStatsus);
 	}
 
 	

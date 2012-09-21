@@ -370,21 +370,30 @@ public class SimManager implements Runnable {
 	 * Desc : 클라우드 내에서 동작중인 가상머신의 리스트를 얻어온다.
 	 * 
 	 * @Method Name : getRunningVMs
+	 * @param srcVirtualMachine
+	 *            <br>  호스트 이름. EX) "host01"
 	 * @return 동작중인 모든 가상머신 리스트 반환 <br>
 	 *         EX)"host01-vm01,host02-vm05,host07-vm06"
 	 * 
 	 */
-	public List getRunningVmList() {
-		List runnHost = getRunningHostList();
-		List runningVmList = new ArrayList();
-		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			runningVmList.addAll(host.getRunningVmList());
-		}
-		return runningVmList;
+	public List getRunningVmList(String hostName) {
+		
+		HostMachine host;		
+		
+		if (hostName.equals("-")){
+			List runnHost = getRunningHostList();
+			List runningVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				runningVmList.addAll(host.getRunningVmList());
+			}
+			return runningVmList;
+		}else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getRunningVmList();
+		}		
 	}
-
+	
 	/**
 	 * Desc : avaiable 상태의 모든 vm 리스트를 얻어온다.
 	 * 

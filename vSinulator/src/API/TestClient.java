@@ -103,7 +103,7 @@ public class TestClient {
 			if ( parameter.equals("vms") ) {
 			}
 			if(parameter.equals("runningvms")){
-				System.out.println(API.getRunningVmList());				
+				System.out.println(API.getRunningVmList("-"));				
 			}
 			if (parameter.equals("busyvms")) {
 				System.out.println(API.getBusyVmList());				
