@@ -11,8 +11,6 @@ import java.util.List;
 
 import javax.swing.text.AbstractDocument.BranchElement;
 
-
-
 /**
  * <pre>
  * API
@@ -34,7 +32,7 @@ public class API_vcluster {
 
 	private static final int PORT = 7878;
 	private static final String IP_ADDR = "127.0.0.1";
-//	private static final String IP_ADDR = "150.183.234.168";
+	// private static final String IP_ADDR = "150.183.234.168";
 	private static InetAddress inetAddress = null;
 	private static Socket socket = null;
 
@@ -51,10 +49,11 @@ public class API_vcluster {
 	private static Object requestToSimulator(String command) {
 		Object result = null;
 		try {
-			socket = new Socket(IP_ADDR,PORT);
+			socket = new Socket(IP_ADDR, PORT);
 
 			// 명령 서버로 날림
-			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+			printWriter = new PrintWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
 			printWriter.println(command);
 			printWriter.flush();
 
@@ -66,7 +65,8 @@ public class API_vcluster {
 			// }
 			// bufferedReader.close();
 
-			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+			ObjectInputStream ois = new ObjectInputStream(
+					socket.getInputStream());
 			result = ois.readObject();
 
 			ois.close();
@@ -172,13 +172,15 @@ public class API_vcluster {
 	 * 
 	 * @Method Name : createNewVirtualMachine
 	 * @param virtualMachine
-	 *            생성할 가상머신이름 EX) "host03-vm03" <br> parameter가 "-" 이면, 앞에서 순차적으로 생성됨	 *           
+	 *            생성할 가상머신이름 EX) "host03-vm03" <br>
+	 *            parameter가 "-" 이면, 앞에서 순차적으로 생성됨 *
 	 * @return 성공하면 "1", 실패하면 "-1"
 	 * 
 	 */
-	public String createNewVirtualMachine(String virtualMachine) {		
+	public String createNewVirtualMachine(String virtualMachine) {
 		return (String) requestToSimulator("20:" + virtualMachine);
 	}
+
 	/**
 	 * Desc : 삭제할 가상머신을 생성한다.
 	 * 
@@ -220,7 +222,7 @@ public class API_vcluster {
 	 */
 	public List getRunningVmList(String hostName) {
 		List runningVmList = new ArrayList();
-		runningVmList = (List) requestToSimulator("23:"+hostName);
+		runningVmList = (List) requestToSimulator("23:" + hostName);
 		return runningVmList;
 	}
 
@@ -332,28 +334,31 @@ public class API_vcluster {
 	}
 
 	/**
-	 * Desc : 가상머신의 상태를 반환 
+	 * Desc : 가상머신의 상태를 반환
+	 * 
 	 * @Method Name : getVmStatus
-	 * @param virtualMachine 가성머신 이름 EX) "host01-vm02"
+	 * @param virtualMachine
+	 *            가성머신 이름 EX) "host01-vm02"
 	 * @return 다음중 하나 반환
 	 *         "pending","prolog","running","shudown","eliplog","stop","null"
 	 */
-	public String getVmStatus(String virtualMachine){
-		return (String) requestToSimulator("32:"+virtualMachine);
+	public String getVmStatus(String virtualMachine) {
+		return (String) requestToSimulator("32:" + virtualMachine);
 	}
+
 	/**
 	 * Desc : Job이 수행중인지 확인
+	 * 
 	 * @Method Name : getVMBusy
-	 * @param virtualMachine 가상머신 이름  EX) "host01-vm03"
+	 * @param virtualMachine
+	 *            가상머신 이름 EX) "host01-vm03"
 	 * @return 상태반환 "busy" or "idle"
 	 * 
 	 */
-	public String getVMBusy(String virtualMachine){
-		return (String) requestToSimulator("33:"+virtualMachine);
+	public String getVMBusy(String virtualMachine) {
+		return (String) requestToSimulator("33:" + virtualMachine);
 	}
-	
-	
-	
+
 	// ******************************************************************
 	// 4X: VIRTUAL SPEC
 	// ******************************************************************
@@ -512,36 +517,37 @@ public class API_vcluster {
 		System.out.println("hostStatus....");
 		String dumpCloudStatsus = "";
 
-		dkdjdj
-
 		List runningVmList = getRunningVmList(hostName);
 
-		
-		
 		dumpCloudStatsus += "\n===================================================================\n";
-		dumpCloudStatsus +="--------------running Vm list --------------\n";
+		dumpCloudStatsus += "\n Running VMs: \n";
+		//host 별로 런닝 vm 개수 필요
+		//host 별로 idel 개수 필요
+		//host 별로 busy 개수 필요
 		
+		
+		dumpCloudStatsus += "--------------running Vm list --------------\n";
 		for (int i = 0; i < runningVmList.size(); i++) {
 			dumpCloudStatsus += (String) runningVmList.get(i) + "\n";
 		}
-		dumpCloudStatsus +="-------------- job running Vm list --------------\n";
-		
-		dumpCloudStatsus += "\n===================================================================\n";
+
 		System.out.println(dumpCloudStatsus);
 
 		// return dumpCloudStatsus;
 	}
-	public void showVM(String virtualMachine){
-		String dumpCloudStatus="";
-		dumpCloudStatus +="[ ID="+getVMUUID(virtualMachine) +"\n"
-		+" Status="+getVmStatus(virtualMachine) +"\n"
-		+" Cpu="+getVMCpuInfo(virtualMachine) +"\n"
-		+" OS="+getVMOSInfo(virtualMachine) +"\n"
-		+" Disk="+getVMDiskInfo(virtualMachine) +"\n"		
-		+" Busy="+getVMBusy(virtualMachine) +" ]";
+
+	public void showVM(String virtualMachine) {
+		String dumpCloudStatus = "";
+		dumpCloudStatus += "[ ID=" + getVMUUID(virtualMachine) + "\n"
+				+ " Status=" + getVmStatus(virtualMachine) + "\n" + " Cpu="
+				+ getVMCpuInfo(virtualMachine) + "\n" + " OS="
+				+ getVMOSInfo(virtualMachine) + "\n" + " Disk="
+				+ getVMDiskInfo(virtualMachine) + "\n" + " Busy="
+				+ getVMBusy(virtualMachine) + " ]";
 		System.out.println(dumpCloudStatus);
 	}
-	public void showCloud(){
+,
+	public void showCloud() {
 		System.out.println("dumpCloudStatus....");
 		String dumpCloudStatsus = "";
 
@@ -549,15 +555,14 @@ public class API_vcluster {
 				+ "total VMs :"
 				+ getTotalVMs()
 				+ "\n running Vms :"
-				+ getRunningVmList().size()
+				+ getRunningVmList("-").size()
 				+ "\ttotal Running Job :"
 				+ getRunningJobs()
 				+ "\ttotal idle VMs :"
 				+ getIdleVmList().size() + "\n";
 		dumpCloudStatsus += "\n===================================================================\n";
-		
+
 		System.out.println(dumpCloudStatsus);
 	}
 
-	
 }
