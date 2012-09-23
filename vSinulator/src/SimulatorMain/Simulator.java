@@ -81,10 +81,9 @@ public class Simulator implements Runnable {
 				resultObj = executeCommand.execute(receiveString);
 				
 
-				// 처리 함수로 넘김 결과 받아서 다시 보내줌
-//				printdWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-//				printdWriter.print(resultString);
-//				printdWriter.flush();
+
+				
+				
 				
 				 oos = new ObjectOutputStream(socket.getOutputStream());
                  oos.writeObject(resultObj);

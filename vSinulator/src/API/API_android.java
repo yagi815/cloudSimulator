@@ -107,7 +107,7 @@ public class API_android {
 	 *         "vSimulator-host01,vSimulaotr-host02,fermiCloud-host01,fermiCloud-host02"
 	 * 	 <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getRunningHostList(String cloudName) {
+	public List getRunningHostList(String hostMame) {
 		return API.getRunningHostList();
 	}
 	/**
@@ -117,8 +117,8 @@ public class API_android {
 	 * @return 현재 동작중인 가상머신 리스트
 	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getCurrentRunningVmList(String cloudName) {
-		return API.getRunningVmList();
+	public List getCurrentRunningVmList(String hostMame) {
+		return API.getRunningVmList(hostMame);
 	}
 	/**
 	 * Desc : 현재 사용가능한 (생성은 되었으나 job은 수행하지 않은..) 가상머신 리스트
@@ -127,8 +127,8 @@ public class API_android {
 	 * @return job을 수행가능한 가상머신 리스트 반환
 	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getCurrentIdleVmList(String cloudName) {
-		return API.getIdleVmList();
+	public List getCurrentIdleVmList(String hostMame) {
+		return API.getIdleVmList(hostMame);
 	}
 	/**
 	 * Desc : 현재 launch 가능한 가상머신 리스트 
@@ -137,8 +137,8 @@ public class API_android {
 	 * @return launch 가능한 vm 리스트
 	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getCurrentAvailableVmList(String cloudName) {
-		return API.getAvailableVmList();
+	public List getCurrentAvailableVmList(String hostMame) {
+		return API.getAvailableVmList(hostMame);
 	}
 	/**
 	 * Desc : 현태 동작중이나 사용이 불가한 가상머신 리스트
@@ -147,8 +147,8 @@ public class API_android {
 	 * @return 사용 불가한 가상머시 개수 리스트
 	 * 
 	 */
-	public List getCurrentUnhealthyVmList(String cloudName) {
-		return API.getUnhealthyVmList();
+	public List getCurrentUnhealthyVmList(String hostMame) {
+		return API.getUnhealthyVmList(hostMame);
 	}
 	/**
 	 * Desc : vm생성시 사용할 OS 이미지 리스트 출력
@@ -157,7 +157,7 @@ public class API_android {
 	 * @return 사용 가능한 OS 이미지 리스트 출력
 	 * 
 	 */
-	public List getImageRepositoryList(String cloudName) { 
+	public List getImageRepositoryList(String hostMame) { 
 		List list = new ArrayList();
 		list.add("CDF_OS_Image");
 		list.add("Belle_OS_Image");

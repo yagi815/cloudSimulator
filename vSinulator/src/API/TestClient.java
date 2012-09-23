@@ -1,15 +1,7 @@
 package API;
 
 import java.awt.List;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Scanner;
-
-import SimulatorMain.ExecuteCommand;
 
 /**
  * <pre>
@@ -101,27 +93,31 @@ public class TestClient {
 		if (command.contains("list")) {
 			
 			if ( parameter.equals("vms") ) {
-			}
+				System.out.println(API.getRunningVmList("-"));
+			}			
 			if(parameter.equals("runningvms")){
-				System.out.println(API.getRunningVmList("-"));				
+				System.out.println(API.getRunningVmList("-"));					
 			}
 			if (parameter.equals("busyvms")) {
-				System.out.println(API.getBusyVmList());				
+				System.out.println(API.getBusyVmList("-"));				
 			}
 			if (parameter.equals("hosts")) {				
 				System.out.println(API.getHostList());				
 			}
-			if (parameter.equals("hostavail")) {				
+			if (parameter.equals("runninghosts")) {				
+				System.out.println(API.getRunningHostList());				
+			}
+			if (parameter.equals("availhosts")) {				
 				System.out.println(API.getAvailableHostList());				
 			}			
 			if (parameter.equals("failvms")) {				
-				System.out.println(API.getFailVmList());				
+				System.out.println(API.getFailVmList("-"));				
 			}
 			if (parameter.equals("idlevms")) {				
-				System.out.println(API.getIdleVmList());				
+				System.out.println(API.getIdleVmList("-"));				
 			}
 			if (parameter.equals("availvms")) {				
-				System.out.println(API.getAvailableVmList());				
+				System.out.println(API.getAvailableVmList("-"));				
 			}			
 		}		
 		
@@ -134,10 +130,19 @@ public class TestClient {
 		
 			
 		if (command.equals("showvm")) {
-			API.showVM(parameter);
+			if (parameter.equals("-")) {
+				System.out.println("input vmname");
+			}else {
+				API.showVM(parameter);
+			}				
 		}
 		if (command.equals("showhost")) {
-			API.showHost(parameter);
+			
+			if (parameter.equals("-")) {
+				System.out.println("input hostname");
+			}else {
+				API.showHost(parameter);
+			}				
 		}
 		if (command.equals("showcloud")) {
 			API.showCloud();

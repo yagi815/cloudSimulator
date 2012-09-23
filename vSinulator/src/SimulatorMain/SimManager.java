@@ -110,11 +110,12 @@ public class SimManager implements Runnable {
 		mainHostContainer = new HostMachine[maxHost];
 		for (int i = 0; i < maxHost; i++) {
 			mainHostContainer[i] = new HostMachine(String.format("host%02d",i + 1));
+			mainHostContainer[i].setHostPower("off");
 		}
 		// 1. turnon host
-		for (int i = 0; i < hostList.size(); i++) {
-			turnOnHostMachine((String) hostList.get(i));
-		}
+//		for (int i = 0; i < hostList.size(); i++) {
+//			turnOnHostMachine((String) hostList.get(i));
+//		}
 		// 2. create vm
 		for (int i = 0; i < vmList.size(); i++) {
 			createNewVirtualMachine((String)vmList.get(i));
@@ -299,24 +300,35 @@ public class SimManager implements Runnable {
 	 */
 	public String createNewVirtualMachine(String virtualMachine) {
 		HostMachine host;
-		String[] tmp = new String[2];
-		tmp = virtualMachine.split("[-]");
-		String hName = tmp[0];
+//		String[] tmp = new String[2];
+//		tmp = virtualMachine.split("[-]");
+//		String hName = tmp[0];
 
-		host = mainHostContainer[getHostIndex(hName)];
 		
 		
 		if (virtualMachine.equals("-")) {			
-			List alist = getAvaiableVmList();
-			host.addVM((String)alist.get(0));
+			List alist = getAvaiableVmList("-");
+			if (alist == null) {
+				return "-1";
+			}
+			String createVmName = (String) alist.get(0);		
+			String[] tmp = new String[2];
+			tmp = createVmName.split("[-]");
+			host = mainHostContainer[getHostIndex(tmp[0])];
+			System.out.println("name>>>----------"+createVmName);
+			host.addVM(createVmName);
+			return "1";
+			
 		}else {			
 			if (!isContainVirtualMachine(virtualMachine)) {
+				String[] tmp = new String[2];
+				tmp = virtualMachine.split("[-]");
+				host = mainHostContainer[getHostIndex(tmp[0])];
+				System.out.println("name>>>----------"+virtualMachine);
 				host.addVM(virtualMachine);
 				return "1";
 			}
 		}
-		
-		
 		return "-1";
 	}
 
@@ -402,15 +414,21 @@ public class SimManager implements Runnable {
 	 *         EX) "host01-vm02,host02-vm08"
 	 * 
 	 */
-	public List getAvaiableVmList() {
-		List runnHost = getRunningHostList();
-		List availableVmList = new ArrayList();
+	public List getAvaiableVmList(String hostName) {
 		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			availableVmList.addAll(host.getAvailableVmList());
+		
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List availableVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				availableVmList.addAll(host.getAvailableVmList());
+			}
+			return availableVmList;			
+		}else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getRunningVmList();
 		}
-		return availableVmList;
 	}
 
 	/**
@@ -421,15 +439,20 @@ public class SimManager implements Runnable {
 	 *         EX) "host07-vm06"
 	 * 
 	 */
-	public List getFailVmList() {
-		List runnHost = getRunningHostList();
-		List failVmList = new ArrayList();
+	public List getFailVmList(String hostName) {
 		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			failVmList.addAll(host.getFailVmList());
-		}
-		return failVmList;
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List failVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				failVmList.addAll(host.getFailVmList());
+			}
+			return failVmList;			
+		}else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getFailVmList();			
+		} 		
 	}
 
 	/**
@@ -440,15 +463,20 @@ public class SimManager implements Runnable {
 	 *         EX) "host07-vm06,hot08-vm01"
 	 * 
 	 */
-	public List getBusyVmList() {
-		List runnHost = getRunningHostList();
-		List busyVmList = new ArrayList();
+	public List getBusyVmList(String hostName) {
 		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			busyVmList.addAll(host.getBusyVmList());
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List busyVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				busyVmList.addAll(host.getBusyVmList());
+			}
+			return busyVmList;			
+		} else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getBusyVmList();
 		}
-		return busyVmList;
 	}
 
 	/**
@@ -459,15 +487,20 @@ public class SimManager implements Runnable {
 	 *         EX) "host07-vm05,..."
 	 * 
 	 */
-	public List getIdleVmList() {
-		List runnHost = getRunningHostList();
-		List idleVmList = new ArrayList();
+	public List getIdleVmList(String hostName) {
 		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			idleVmList.addAll(host.getIdleVmList());
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List idleVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+			 	host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				idleVmList.addAll(host.getIdleVmList());
+			}
+			return idleVmList;			
+		} else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getIdleVmList();
 		}
-		return idleVmList;
 	}
 
 	/**
@@ -478,15 +511,20 @@ public class SimManager implements Runnable {
 	 *         EX) "host07-vm01"
 	 * 
 	 */
-	public List getUnhealthyVmList() {
-		List runnHost = getRunningHostList();
-		List unHealthyVmList = new ArrayList();
+	public List getUnhealthyVmList(String hostName) {
 		HostMachine host;
-		for (int i = 0; i < runnHost.size(); i++) {
-			host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
-			unHealthyVmList.addAll(host.getUnHealthyVmList());
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List unHealthyVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				unHealthyVmList.addAll(host.getUnHealthyVmList());
+			}
+			return unHealthyVmList;			
+		} else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getUnHealthyVmList();
 		}
-		return unHealthyVmList;
 	}
 
 	/**
@@ -517,9 +555,9 @@ public class SimManager implements Runnable {
 	 * @return Total Job 수 반환 <br>
 	 *         EX) "43"
 	 */
-	public String getRunningJobs() {
+	public String getRunningJobs(String hostName) {
 		List busyVMs;
-		busyVMs = getBusyVmList();
+		busyVMs = getBusyVmList(hostName);
 		return busyVMs.size() + "";
 	}
 
@@ -763,7 +801,7 @@ public class SimManager implements Runnable {
 	 * 
 	 */
 	public String jobSubmit(String jobName){
-		List list = getIdleVmList();
+		List list = getIdleVmList("-");
  		String virtualMachine = (String)list.get(0);
  		
  		

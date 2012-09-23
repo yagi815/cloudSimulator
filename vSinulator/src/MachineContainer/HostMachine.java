@@ -23,7 +23,7 @@ public class HostMachine {
 
 	// private String cloudName = "vSimulator";
 	private String hostName = "";
-	private String hostPower = "on";
+	private String hostPower = "off";
 
 	private int totalVirtualMachine = 12;
 //	private int runningVMs = 0;
@@ -48,7 +48,10 @@ public class HostMachine {
 	}
 
 	public synchronized void addVM(String virtualMachine) {
-		virtualMachineList.add(new VirtualMachine(virtualMachine));
+		if (this.hostPower == "off") {
+			this.hostPower = "on";
+		}		
+		virtualMachineList.add(new VirtualMachine(virtualMachine));			
 	}
 
 	public synchronized void removeVM(String virtualMachine) {
@@ -213,10 +216,21 @@ public class HostMachine {
 	 */
 	public synchronized List getAvailableVmList() {
 		List availableList = new ArrayList();
-		for (int i = 0; i < virtualMachineList.size(); i++) {
-			VirtualMachine vm = (VirtualMachine)virtualMachineList.get(i);
-			if (vm.getVmAvailable().equals("available")) {				
-				availableList.add( vm.getVmName());
+
+		String [] list = new String[this.totalVirtualMachine];
+		for (int i = 0; i < this.totalVirtualMachine; i++) {
+			
+			if (this.hostName.equals("host01") && i==0) {// master
+				continue;
+			}
+			
+			String vName = String.format("vm%02d", i);
+			String hName= this.hostName;
+			String virtualMachine =hName+"-"+vName; 
+			list[i] = virtualMachine;
+			
+			if (!isContainVirtualMachine(list[i])) {				
+				availableList.add(list[i]);
 			}
 		}
 		return availableList;

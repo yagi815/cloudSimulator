@@ -1,11 +1,13 @@
 package API;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,42 +39,41 @@ public class API_vcluster {
 	private static Socket socket = null;
 
 	private static PrintWriter printWriter = null;
-	private static BufferedReader bufferedReader = null;
+	private static ObjectInputStream ois = null;
 
 	private static String tmp = "";
 
 	public API_vcluster() {
-		// TODO Auto-generated constructor stub
+		
+//		try {
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}		
+		
 
 	}
 
-	private static Object requestToSimulator(String command) {
+	private static synchronized Object requestToSimulator(String command) {
 		Object result = null;
 		try {
+			
 			socket = new Socket(IP_ADDR, PORT);
-
-			// 명령 서버로 날림
-			printWriter = new PrintWriter(new OutputStreamWriter(
-					socket.getOutputStream()));
+			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+			// 명령 서버로 날림					
 			printWriter.println(command);
 			printWriter.flush();
 
-			// 서버로부터 결과 받아서 출력
-			// bufferedReader = new BufferedReader(new
-			// InputStreamReader(socket.getInputStream()));
-			// while ( (tmp=bufferedReader.readLine()) !=null ) {
-			// result += tmp+"\n";
-			// }
-			// bufferedReader.close();
 
-			ObjectInputStream ois = new ObjectInputStream(
-					socket.getInputStream());
+			// 결과 받기
+			ois = new ObjectInputStream(socket.getInputStream());
 			result = ois.readObject();
-
+			
+			
 			ois.close();
 			printWriter.close();
 			socket.close();
-
 		} catch (Exception e) {
 			// TODO: handle EXception
 			e.printStackTrace();
@@ -95,7 +96,7 @@ public class API_vcluster {
 	 */
 	public List getRunningHostList() {
 		List runningHostList = new ArrayList();
-		runningHostList = (List) requestToSimulator("00:nothing");
+		runningHostList = (List) requestToSimulator("00:-");
 		return runningHostList;
 	}
 
@@ -159,8 +160,10 @@ public class API_vcluster {
 	 * @return 모든 호스트의 리스트 <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public String getHostList() {
-		return (String) requestToSimulator("05:-");
+	public List getHostList() {
+		List hostList = new ArrayList();
+		hostList = (List)requestToSimulator("05:-");
+		return hostList;
 	}
 
 	// ******************************************************************
@@ -234,9 +237,9 @@ public class API_vcluster {
 	 *         EX) "host07-vm10,host07-vm11,host07-vm12" * <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getAvailableVmList() {
+	public List getAvailableVmList(String hostName) {
 		List availableVmList = new ArrayList();
-		availableVmList = (List) requestToSimulator("24:nothing");
+		availableVmList = (List) requestToSimulator("24:"+hostName);
 		return availableVmList;
 	}
 
@@ -248,9 +251,9 @@ public class API_vcluster {
 	 *         EX) "host07-vm06" * <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getFailVmList() {
+	public List getFailVmList(String hostName) {
 		List failVmList = new ArrayList();
-		failVmList = (List) requestToSimulator("25:nothing");
+		failVmList = (List) requestToSimulator("25:"+hostName);
 		return failVmList;
 	}
 
@@ -262,9 +265,9 @@ public class API_vcluster {
 	 *         EX) "host07-vm06" <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getBusyVmList() {
+	public List getBusyVmList(String hostName) {
 		List failVmList = new ArrayList();
-		failVmList = (List) requestToSimulator("26:nothing");
+		failVmList = (List) requestToSimulator("26:"+hostName);
 		return failVmList;
 
 	}
@@ -277,9 +280,9 @@ public class API_vcluster {
 	 *         EX) "host07-vm05" <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getIdleVmList() {
+	public List getIdleVmList(String hostName) {
 		List idleVmList = new ArrayList();
-		idleVmList = (List) requestToSimulator("27:nothing");
+		idleVmList = (List) requestToSimulator("27:"+hostName);
 		return idleVmList;
 	}
 
@@ -291,9 +294,9 @@ public class API_vcluster {
 	 *         EX) "host07-vm01" <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
-	public List getUnhealthyVmList() {
+	public List getUnhealthyVmList(String hostName) {
 		List unHealthyVmList = new ArrayList();
-		unHealthyVmList = (List) requestToSimulator("28:nothing");
+		unHealthyVmList = (List) requestToSimulator("28:"+hostName);
 		return unHealthyVmList;
 	}
 
@@ -307,7 +310,7 @@ public class API_vcluster {
 	 */
 	public List getTotalVmList() {
 		List totalVmList = new ArrayList();
-		totalVmList = (List) requestToSimulator("29:nothing");
+		totalVmList = (List) requestToSimulator("29:-");
 		return totalVmList;
 	}
 
@@ -318,8 +321,8 @@ public class API_vcluster {
 	 * @return Job을 처리중인 머신수 EX) 80
 	 * 
 	 */
-	public String getRunningJobs() {
-		return (String) requestToSimulator("30:nothing");
+	public String getRunningJobs(String hostName) {
+		return (String) requestToSimulator("30:"+hostName);
 	}
 
 	/**
@@ -330,7 +333,7 @@ public class API_vcluster {
 	 * 
 	 */
 	public String getTotalVMs() {
-		return (String) requestToSimulator("31:nothing");
+		return (String) requestToSimulator("31:-");
 	}
 
 	/**
@@ -518,35 +521,39 @@ public class API_vcluster {
 		String dumpCloudStatsus = "";
 
 		List runningVmList = getRunningVmList(hostName);
+		List busyVmList = getBusyVmList(hostName);
+		List idleVmList = getIdleVmList(hostName);
+		
+		
+		
 
 		dumpCloudStatsus += "\n===================================================================\n";
-		dumpCloudStatsus += "\n Running VMs: \n";
-		//host 별로 런닝 vm 개수 필요
-		//host 별로 idel 개수 필요
-		//host 별로 busy 개수 필요
-		
-		
-		dumpCloudStatsus += "--------------running Vm list --------------\n";
-		for (int i = 0; i < runningVmList.size(); i++) {
-			dumpCloudStatsus += (String) runningVmList.get(i) + "\n";
-		}
-
+		dumpCloudStatsus += "\n----POWER : ";
+		dumpCloudStatsus += "\n----Running VMs: " + runningVmList.size();
+		dumpCloudStatsus += "\n" + runningVmList;
+		dumpCloudStatsus += "\n----Busy VMs: " + busyVmList.size();
+		dumpCloudStatsus += "\n" + busyVmList;
+		dumpCloudStatsus += "\n----idle VMs: " + idleVmList.size();
+		dumpCloudStatsus += "\n" + idleVmList;
+		dumpCloudStatsus += "\n===================================================================\n";
 		System.out.println(dumpCloudStatsus);
-
-		// return dumpCloudStatsus;
 	}
 
 	public void showVM(String virtualMachine) {
 		String dumpCloudStatus = "";
-		dumpCloudStatus += "[ ID=" + getVMUUID(virtualMachine) + "\n"
-				+ " Status=" + getVmStatus(virtualMachine) + "\n" + " Cpu="
-				+ getVMCpuInfo(virtualMachine) + "\n" + " OS="
-				+ getVMOSInfo(virtualMachine) + "\n" + " Disk="
-				+ getVMDiskInfo(virtualMachine) + "\n" + " Busy="
-				+ getVMBusy(virtualMachine) + " ]";
+		dumpCloudStatus 
+				+= ""
+				+ " Status=" + getVmStatus(virtualMachine) + "\n" 
+				+ " Busy="+ getVMBusy(virtualMachine) + "\n "
+				
+				+ "\n-------------\n"				
+				+ " ID=" + getVMUUID(virtualMachine) + "\n"
+				+ " Cpu="+ getVMCpuInfo(virtualMachine) + "\n"				
+				+ " OS="+ getVMOSInfo(virtualMachine) + "\n" 
+				+ " Disk="+ getVMDiskInfo(virtualMachine) + "\n"; 
 		System.out.println(dumpCloudStatus);
 	}
-,
+
 	public void showCloud() {
 		System.out.println("dumpCloudStatus....");
 		String dumpCloudStatsus = "";
@@ -557,9 +564,9 @@ public class API_vcluster {
 				+ "\n running Vms :"
 				+ getRunningVmList("-").size()
 				+ "\ttotal Running Job :"
-				+ getRunningJobs()
+				+ getRunningJobs("-")
 				+ "\ttotal idle VMs :"
-				+ getIdleVmList().size() + "\n";
+				+ getIdleVmList("-").size() + "\n";
 		dumpCloudStatsus += "\n===================================================================\n";
 
 		System.out.println(dumpCloudStatsus);

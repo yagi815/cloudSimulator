@@ -68,25 +68,25 @@ public class ExecuteCommand {
 			returnObj  =	simManager.getRunningVmList(parameter);			
 			break;
 		case 24:
-			returnObj  =	simManager.getAvaiableVmList();			
+			returnObj  =	simManager.getAvaiableVmList(parameter);			
 			break;
 		case 25:
-			returnObj  =	simManager.getFailVmList();		
+			returnObj  =	simManager.getFailVmList(parameter);		
 			break;
 		case 26:
-			returnObj  =	simManager.getBusyVmList();			
+			returnObj  =	simManager.getBusyVmList(parameter);			
 			break;
 		case 27:
-			returnObj  =	simManager.getIdleVmList();			
+			returnObj  =	simManager.getIdleVmList(parameter);			
 			break;
 		case 28:
-			returnObj  =	simManager.getUnhealthyVmList();			
+			returnObj  =	simManager.getUnhealthyVmList(parameter);			
 			break;
 		case 29:
 			returnObj  =	simManager.getTotalVmList();			
 			break;
 		case 30:
-			returnObj  =	simManager.getRunningJobs();			
+			returnObj  =	simManager.getRunningJobs(parameter);			
 			break;
 		case 31:
 			returnObj  =	simManager.getTotalVMs();			
@@ -116,6 +116,9 @@ public class ExecuteCommand {
 			break;
 		case 45:
 			returnObj  =	simManager.getVMKernelInfo(parameter);			
+			break;
+		case 46:
+			returnObj  =	simManager.getVMUUID(parameter);			
 			break;
 					
 			// MANIPULATION
