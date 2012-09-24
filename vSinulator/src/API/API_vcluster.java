@@ -20,7 +20,8 @@ import javax.swing.text.AbstractDocument.BranchElement;
  * 
  * </pre>
  * 
- * Desc : Vcluster 가 사용 할 vsimulator 접속하는 API이다. 가상 클라우드인 시뮬레이터에서 필요한 모든 데이터를
+ * Desc : Vcluster 가 사용 할 vsimulator 접속하는 API이다. <br>
+ * 가상 클라우드인 시뮬레이터에서 필요한 모든 데이터를 <br>
  * 요청하고 받아온다.
  * 
  * @Company : KISTI
@@ -41,36 +42,25 @@ public class API_vcluster {
 	private static PrintWriter printWriter = null;
 	private static ObjectInputStream ois = null;
 
-	private static String tmp = "";
-
 	public API_vcluster() {
-		
-//		try {
-//			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}		
-		
-
+		// TODO Auto-generated constructor stub
 	}
 
 	private static synchronized Object requestToSimulator(String command) {
 		Object result = null;
 		try {
-			
+
 			socket = new Socket(IP_ADDR, PORT);
-			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-			// 명령 서버로 날림					
+			printWriter = new PrintWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+			// 명령 서버로 날림
 			printWriter.println(command);
 			printWriter.flush();
-
 
 			// 결과 받기
 			ois = new ObjectInputStream(socket.getInputStream());
 			result = ois.readObject();
-			
-			
+
 			ois.close();
 			printWriter.close();
 			socket.close();
@@ -131,7 +121,7 @@ public class API_vcluster {
 	 * 
 	 * @Method Name : getAvailableHostList
 	 * @return 사용가능한 호스트 리스트 반환 <br>
-	 *         "host07, host08... " <br>
+	 *         EX) "host07, host08... " <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 * 
 	 */
@@ -158,11 +148,12 @@ public class API_vcluster {
 	 * 
 	 * @Method Name : getHostList
 	 * @return 모든 호스트의 리스트 <br>
+	 *         EX) "host01, host02" <br>
 	 *         스트링으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public List getHostList() {
 		List hostList = new ArrayList();
-		hostList = (List)requestToSimulator("05:-");
+		hostList = (List) requestToSimulator("05:-");
 		return hostList;
 	}
 
@@ -172,11 +163,13 @@ public class API_vcluster {
 
 	/**
 	 * Desc : 새로운 가상머신을 생성한다.
-	 * 
+	 *
+
 	 * @Method Name : createNewVirtualMachine
 	 * @param virtualMachine
 	 *            생성할 가상머신이름 EX) "host03-vm03" <br>
-	 *            parameter가 "-" 이면, 앞에서 순차적으로 생성됨 *
+	 *            parameter가 "-" 이면, 앞에서 순차적으로 생성됨
+	 * 
 	 * @return 성공하면 "1", 실패하면 "-1"
 	 * 
 	 */
@@ -239,7 +232,7 @@ public class API_vcluster {
 	 */
 	public List getAvailableVmList(String hostName) {
 		List availableVmList = new ArrayList();
-		availableVmList = (List) requestToSimulator("24:"+hostName);
+		availableVmList = (List) requestToSimulator("24:" + hostName);
 		return availableVmList;
 	}
 
@@ -253,7 +246,7 @@ public class API_vcluster {
 	 */
 	public List getFailVmList(String hostName) {
 		List failVmList = new ArrayList();
-		failVmList = (List) requestToSimulator("25:"+hostName);
+		failVmList = (List) requestToSimulator("25:" + hostName);
 		return failVmList;
 	}
 
@@ -267,7 +260,7 @@ public class API_vcluster {
 	 */
 	public List getBusyVmList(String hostName) {
 		List failVmList = new ArrayList();
-		failVmList = (List) requestToSimulator("26:"+hostName);
+		failVmList = (List) requestToSimulator("26:" + hostName);
 		return failVmList;
 
 	}
@@ -282,7 +275,7 @@ public class API_vcluster {
 	 */
 	public List getIdleVmList(String hostName) {
 		List idleVmList = new ArrayList();
-		idleVmList = (List) requestToSimulator("27:"+hostName);
+		idleVmList = (List) requestToSimulator("27:" + hostName);
 		return idleVmList;
 	}
 
@@ -296,7 +289,7 @@ public class API_vcluster {
 	 */
 	public List getUnhealthyVmList(String hostName) {
 		List unHealthyVmList = new ArrayList();
-		unHealthyVmList = (List) requestToSimulator("28:"+hostName);
+		unHealthyVmList = (List) requestToSimulator("28:" + hostName);
 		return unHealthyVmList;
 	}
 
@@ -322,7 +315,7 @@ public class API_vcluster {
 	 * 
 	 */
 	public String getRunningJobs(String hostName) {
-		return (String) requestToSimulator("30:"+hostName);
+		return (String) requestToSimulator("30:" + hostName);
 	}
 
 	/**
@@ -523,9 +516,6 @@ public class API_vcluster {
 		List runningVmList = getRunningVmList(hostName);
 		List busyVmList = getBusyVmList(hostName);
 		List idleVmList = getIdleVmList(hostName);
-		
-		
-		
 
 		dumpCloudStatsus += "\n===================================================================\n";
 		dumpCloudStatsus += "\n----POWER : ";
@@ -541,16 +531,13 @@ public class API_vcluster {
 
 	public void showVM(String virtualMachine) {
 		String dumpCloudStatus = "";
-		dumpCloudStatus 
-				+= ""
-				+ " Status=" + getVmStatus(virtualMachine) + "\n" 
-				+ " Busy="+ getVMBusy(virtualMachine) + "\n "
-				
-				+ "\n-------------\n"				
-				+ " ID=" + getVMUUID(virtualMachine) + "\n"
-				+ " Cpu="+ getVMCpuInfo(virtualMachine) + "\n"				
-				+ " OS="+ getVMOSInfo(virtualMachine) + "\n" 
-				+ " Disk="+ getVMDiskInfo(virtualMachine) + "\n"; 
+		dumpCloudStatus += "" + " Status=" + getVmStatus(virtualMachine) + "\n"
+				+ " Busy=" + getVMBusy(virtualMachine) + "\n "
+
+				+ "\n-------------\n" + " ID=" + getVMUUID(virtualMachine)
+				+ "\n" + " Cpu=" + getVMCpuInfo(virtualMachine) + "\n" + " OS="
+				+ getVMOSInfo(virtualMachine) + "\n" + " Disk="
+				+ getVMDiskInfo(virtualMachine) + "\n";
 		System.out.println(dumpCloudStatus);
 	}
 

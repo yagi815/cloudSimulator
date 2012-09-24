@@ -27,7 +27,7 @@ import java.net.Socket;
 public class Simulator implements Runnable {
 	
 	private static final int PORT = 7878;
-//	private static final String IP_ADDR = "127.0.0.1";
+
 	
 	private ServerSocket serverSocket = null;
 	private Socket socket = null;
@@ -37,11 +37,11 @@ public class Simulator implements Runnable {
 	private PrintWriter printdWriter = null;	
 	private Object resultObj = null;
 	
-//	private Vector vector = null;
-//	private List hostList = null;
-//	 
+
+	
 	private static ExecuteCommand executeCommand= null;
 	private static SimManager simManager = null;
+	
 	
 	
 	

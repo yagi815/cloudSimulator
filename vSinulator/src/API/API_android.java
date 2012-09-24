@@ -3,6 +3,8 @@ package API;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.AbstractDocument.BranchElement;
+
 
 /**
  * <pre>
@@ -11,17 +13,18 @@ import java.util.List;
  * 
  * </pre>
  * 
- * Desc : 추후에 command 모듈에서도 사용. vCluster부분에 탑재 할 API 리스트 이다. vSimulator 를 사용하는
- * 경우는 API_vCluster 를 이용한다.
+ * Desc :  안드로이드 클라이언트에 탑재 할 API 리스트 이다. <br> 
+ * vSimulator 를 사용하는  경우는 API_vCluster 를 이용한다.
  * 
  * @Company : KISTI
  * @Author :grkim
  * @Date :2012. 8. 24. 오후 4:03:35
- * @Version:
+ * @Version: 
  * 
  */
 public class API_android {
 
+	
 	private API_vcluster API = null;
 	
 
@@ -34,23 +37,24 @@ public class API_android {
 	// vClustger API for Androied
 	// 00:param1,param2......
 	// ******************************************************************
-
+	
 	/**
-	 * Desc : Job을 담을 수 있는 max 큐 사이즈
+	 * Desc : Job을 담을 수 있는 max 큐 사이즈 <br>
+	 * vCluster 에서 큐 사이즈를 가져온다. 
 	 * 
 	 * @Method Name : getMaxQueue
-	 * @return Max 큐 사이즈 반환
+	 * @return Max 큐 사이즈 반환 <br> EX) 100
 	 * 
 	 */
-	public int getMaxQueue() {
-		return 1000;
+	public int getMaxQueue() {		
+		return 1000; // 임시 값.
 	}
-
 	/**
-	 * Desc : 현재 처리 중인 Job 개수를 반환
+	 * Desc : 현재 처리 중인 Job 개수를 반환 <br>
+	 * vCluster 에서 값 읽어온다.
 	 * 
 	 * @Method Name : getRunningJobs
-	 * @return 현재 수행하고 있는 Job 수를 반환
+	 * @return 현재 수행하고 있는 Job 수를 반환 <br>EX) 80
 	 * 
 	 */
 	public int getRunningJobs() {
@@ -58,10 +62,10 @@ public class API_android {
 	}
 
 	/**
-	 * Desc : 큐에 대기하고있는 Job수를 반환
-	 * 
+	 * Desc : 큐에 대기하고있는 Job수를 반환 <br>
+	 * vCluster 에서 값 읽어온다. 
 	 * @Method Name : getWatingJobs
-	 * @return 큐에 대기중인 Job 수
+	 * @return 큐에 대기중인 Job 수  <br> EX) 90
 	 * 
 	 */
 	public int getWatingJobs() {
@@ -99,13 +103,13 @@ public class API_android {
 		return list;
 	}
 	/**
-	 * Desc : 현재 동작중인 host리스트
+	 * Desc : 현재 동작중인 host리스트 (전원이 on 상태인..)
 	 * 
 	 * @Method Name : getRunningHostList
 	 * @return 현재 동작중인 host 리스트 반환 <br>
 	 *         EX)
-	 *         "vSimulator-host01,vSimulaotr-host02,fermiCloud-host01,fermiCloud-host02"
-	 * 	 <br>         String으로 캐스팅해서 사용 (String)list.get(i)
+	 *         "vSimulator-host01, vSimulaotr-host02, fermiCloud-host01, fermiCloud-host02" <br>
+	 * 	 	String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public List getRunningHostList(String hostMame) {
 		return API.getRunningHostList();
@@ -114,8 +118,9 @@ public class API_android {
 	 * Desc :현재 동작중인 가상머신 리스트 
 	 * 
 	 * @Method Name : getCurrentRunningVms
-	 * @return 현재 동작중인 가상머신 리스트
-	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
+	 * @return 현재 동작중인 가상머신 리스트  <br>
+	 * EX) "host03-vm00, host04-vm03", <br>
+	 *  String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public List getCurrentRunningVmList(String hostMame) {
 		return API.getRunningVmList(hostMame);
@@ -145,7 +150,7 @@ public class API_android {
 	 * 
 	 * @Method Name : getCurrentUnhealthyVms
 	 * @return 사용 불가한 가상머시 개수 리스트
-	 * 
+	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public List getCurrentUnhealthyVmList(String hostMame) {
 		return API.getUnhealthyVmList(hostMame);
@@ -155,7 +160,7 @@ public class API_android {
 	 * 
 	 * @Method Name : getImageRepositoryList
 	 * @return 사용 가능한 OS 이미지 리스트 출력
-	 * 
+	 * <br>         String으로 캐스팅해서 사용 (String)list.get(i)
 	 */
 	public List getImageRepositoryList(String hostMame) { 
 		List list = new ArrayList();
