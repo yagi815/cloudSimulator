@@ -97,6 +97,12 @@ public class ExecuteCommand {
 		case 33:
 			returnObj  =	simManager.getVMBusy(parameter);			
 			break;
+		case 34:
+			returnObj  =	simManager.getRunningJobList(parameter);			
+			break;
+		case 35:
+			returnObj  =	simManager.getTotalAvailableVMs();			
+			break;
 		
 			// VM SPEC
 		case 40:

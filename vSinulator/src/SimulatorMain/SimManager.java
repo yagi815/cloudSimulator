@@ -40,6 +40,7 @@ public class SimManager implements Runnable {
 	private static List vmList;
 	private static int maxHost;
 	private static int maxVM;
+//	private static int totalAvailableVMs;
 		
 	
 	private static int jobRunningTime;
@@ -478,6 +479,21 @@ public class SimManager implements Runnable {
 			return host.getBusyVmList();
 		}
 	}
+	public List getRunningJobList(String hostName) {
+		HostMachine host;
+		if (hostName.equals("-")) {
+			List runnHost = getRunningHostList();
+			List busyVmList = new ArrayList();
+			for (int i = 0; i < runnHost.size(); i++) {
+				host = mainHostContainer[getHostIndex((String) runnHost.get(i))];
+				busyVmList.addAll(host.getRunningJobList());
+			}
+			return busyVmList;			
+		} else {
+			host = mainHostContainer[getHostIndex(hostName)];
+			return host.getRunningJobList();
+		}
+	}
 
 	/**
 	 * Desc : IDLE 상태의 가상머신의 리스트를 얻어온다.
@@ -614,6 +630,15 @@ public class SimManager implements Runnable {
 		return null;
 	}
 
+	public String getTotalAvailableVMs(){
+		int totalAvailableVMs=0;
+		HostMachine host;
+		for (int i = 0; i < mainHostContainer.length; i++) {
+			host = mainHostContainer[i];
+			totalAvailableVMs += host.getTotalVirtualMachine();
+		}
+		return totalAvailableVMs+"";
+	}
 	
 	/**
 	 * Desc : 현재 클라우드 이름 반환

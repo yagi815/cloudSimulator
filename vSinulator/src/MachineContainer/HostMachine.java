@@ -160,6 +160,16 @@ public class HostMachine {
 		}
 		return busyList;
 	}
+	public synchronized List getRunningJobList() {
+		List jobList = new ArrayList();
+		for (int i = 0; i < virtualMachineList.size(); i++) {
+			VirtualMachine vm = (VirtualMachine)virtualMachineList.get(i);
+			if (vm.getVmBusy().equals("busy")) {				
+				jobList.add( "VM: "+vm.getVmName()+" JOB: "+vm.getJobName()+"\n");
+			}
+		}
+		return jobList;
+	}
 	/**
 	 * Desc : Job이 실행중인 
 	 * @Method Name : getIdleVMs

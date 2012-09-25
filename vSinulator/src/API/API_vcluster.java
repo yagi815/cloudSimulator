@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.swing.text.AbstractDocument.BranchElement;
 
 /**
@@ -354,6 +355,15 @@ public class API_vcluster {
 	public String getVMBusy(String virtualMachine) {
 		return (String) requestToSimulator("33:" + virtualMachine);
 	}
+	/**
+	 * Desc : 총 생성가능한 vm 개수 리턴 한다. 
+	 * @Method Name : getTotalAvailableVMs
+	 * @return
+	 * 
+	 */
+	public String getTotalAvailableVMs() {
+		return (String) requestToSimulator("35:-" );
+	}
 
 	// ******************************************************************
 	// 4X: VIRTUAL SPEC
@@ -486,27 +496,27 @@ public class API_vcluster {
 		return (String) requestToSimulator("80:" + jobName);
 	}
 
+	/**
+	 * Desc : 수행중인 Job 리스트를 가져온다. 
+	 * @Method Name : getJobRunningList
+	 * @param hostName 호스트 이름 EX) "host02"
+	 * @return 동작중인 job list <br> EX) "VM:host02-vm00 JOB:123.job"
+	 * 
+	 */
+	public List getJobRunningList(String hostName){
+		List getJobRunningList = new ArrayList();
+		getJobRunningList = (List) requestToSimulator("26:" + hostName);
+		return getJobRunningList;
+	}
 	// ******************************************************************
 	// FOR TEST
 	// ******************************************************************
 
+
 	/**
-	 * Desc : Test 용 클라우드 출력 함수 * EX> prompt> dump <br>
-	 * ====================================================================<br>
-	 * HostName: host01<br>
-	 * TotalVMs: 12 runningVMs: 3<br>
-	 * --------------------------------------------------------------<br>
-	 * vm ID: 2fa54c42-05c4-4fa4-a70a-87d6f1c69421 vm Name: master vm Status:
-	 * running<br>
-	 * vm ID: 10de73c4-46ae-4cde-af8a-3d3efbbd20a5 vm Name: vm001 vm Status:
-	 * running<br>
-	 * vm ID: 0b056dcf-f286-4d9c-ac63-9a3c2c553e63 vm Name: vm002 vm Status:
-	 * running<br>
-	 * <br>
-	 * ===================================================================<br>
-	 * 
-	 * @Method Name : dumpCloudStatus
-	 * @return 클라우드 상태를 출력 한다.
+	 * Desc : 호스트의 상태를 보여준다. 
+	 * @Method Name : showHost
+	 * @param hostName 보여줄 호스트 이름 EX)"host02"
 	 * 
 	 */
 	public void showHost(String hostName) {
@@ -529,6 +539,12 @@ public class API_vcluster {
 		System.out.println(dumpCloudStatsus);
 	}
 
+	/**
+	 * Desc : 가상머신의 상태를 보여준다. 
+	 * @Method Name : showVM
+	 * @param virtualMachine 보여줄 가상머신이름 EX) "host01-vm00"
+	 * 
+	 */
 	public void showVM(String virtualMachine) {
 		String dumpCloudStatus = "";
 		dumpCloudStatus += "" + " Status=" + getVmStatus(virtualMachine) + "\n"
@@ -541,6 +557,11 @@ public class API_vcluster {
 		System.out.println(dumpCloudStatus);
 	}
 
+	/**
+	 * Desc : 클라우드 상태를 보여준다. (vSimulator)
+	 * @Method Name : showCloud
+	 * 
+	 */
 	public void showCloud() {
 		System.out.println("dumpCloudStatus....");
 		String dumpCloudStatsus = "";

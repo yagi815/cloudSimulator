@@ -119,6 +119,9 @@ public class TestClient {
 			if (parameter.equals("availvms")) {				
 				System.out.println(API.getAvailableVmList("-"));				
 			}			
+			if (parameter.equals("jobs")) {
+				System.out.println(API.getRunningJobs("-"));
+			}
 		}		
 		
 		if (command.contains("createvm")) {		
@@ -149,12 +152,22 @@ public class TestClient {
 		}
 	
 	
+		
 		if (command.contains("starthost")) {
 			System.out.println(API.turnOnHostMachine(parameter));
 		}
 		if (command.contains("stophost")) {
 			System.out.println(API.turnOffHostMachine(parameter));			
 		}
+		
+		
+		if (command.contains("job-submit")) {
+			System.out.println(API.jobSubmit(parameter));
+		}
+		
+		
+		
+		
 //		if (command.contains("starvm")) {
 //			
 //		}

@@ -141,6 +141,10 @@ public class VirtualMachine implements Runnable{
 //		return vmRunning;
 //	}
 
+	public synchronized String getJobName() {
+		return jobName;
+	}
+	
 	public synchronized String getVmBusy() {
 		return vmBusy;
 	}
