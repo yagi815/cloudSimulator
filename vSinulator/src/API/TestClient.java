@@ -46,8 +46,7 @@ public class TestClient {
 		 * 전원이 들어가서 동작중인 가상머신 리스트 
 		 * 
 		 * list busyvms
-		 * job을 수행중인 가상머신 리스트
-		 * 
+		 * job을 수행중인 가상머신 리스트		 * 
 		 *  
 		 * list hosts
 		 * 시뮬레이터에 있는 물리적인 호스트 들의 리스트
@@ -88,8 +87,7 @@ public class TestClient {
 		 * 
 		 * */
 		
-		
-		
+				
 		if (command.contains("list")) {
 			
 			if ( parameter.equals("vms") ) {
@@ -122,7 +120,8 @@ public class TestClient {
 			if (parameter.equals("jobs")) {
 				System.out.println(API.getRunningJobs("-"));
 			}
-		}		
+		}
+		
 		
 		if (command.contains("createvm")) {		
 			System.out.println(API.createNewVirtualMachine(parameter));			
@@ -149,8 +148,7 @@ public class TestClient {
 		}
 		if (command.equals("showcloud")) {
 			API.showCloud();
-		}
-	
+		}	
 	
 		
 		if (command.contains("starthost")) {
