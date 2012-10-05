@@ -1,6 +1,5 @@
-package API;
+ package API;
 
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Random;
  * @Version:
  *
  */
-public class demoTest {
+public class demoTest_old {
 			
 	private static API_android api_android= null;
 	private static API_vcluster api_vcluster= null;
@@ -25,7 +24,7 @@ public class demoTest {
 	
 	
 	
-	public demoTest() {
+	public demoTest_old() {
 		// TODO Auto-generated constructor stub
 		api_android = new API_android();	
 		api_vcluster = new API_vcluster();	
@@ -49,35 +48,55 @@ public class demoTest {
 		 * 
 		 * 추가로 fail모듈 생성해서 vm 죽이고, 새로운 멋힌에 Job 이동시켜 수행한다. 
 		 */
+		boolean IS_TRUE = true;
+		Random random = new Random();
+		int randomNumber = 0;
+		int totalJobs=0;
 		
-		final Random random = new Random();
-		final int randomNumber = 0;
-		int totalJobs=0;	
 		
-		while (true) {
-			api_vcluster.showCloud();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				api_vcluster.showCloud();
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
+		}).start();
+		
+		
+		
+		
 		
 		
 			
+		while (IS_TRUE) {			
+			
+			randomNumber = random.nextInt(10);			
+			
+			
+			if (totalJobs < 200) {
+				
+				vCluster.job_submit(randomNumber+20); // 10초에 한번씩
+				System.out.println(randomNumber+20+" jobs are submitted.");
+				totalJobs += randomNumber+20;
+			}
+			
+			
+			api_vcluster.showCloud();
+			try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+		}		
 	}
 	
 	//------------------------------------------------------------------	
 	public static void main(String[] args) {	
-		demoTest demo = new demoTest();
+		demoTest_old demo = new demoTest_old();
 		demo.demoStart();
-	}
-}
-class jobSubmitter{
-	public jobSubmitter() {
-		// TODO Auto-generated constructor stub
-	}
-	public void sumbmit(){		
 	}
 }

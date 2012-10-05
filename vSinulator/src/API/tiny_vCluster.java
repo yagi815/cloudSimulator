@@ -10,14 +10,14 @@ public class tiny_vCluster {
 	
 	
 	private API_vcluster API;
-	private Queue jobQueue;
+	private JobQueue jobQueue;
 	
 	
 	
 	public tiny_vCluster() {
 		// TODO Auto-generated constructor stub
 		API	 = new API_vcluster();
-		jobQueue = new Queue(maxQueue);
+		jobQueue = new JobQueue(maxQueue);
 	}
 	
 	
@@ -31,11 +31,17 @@ public class tiny_vCluster {
 		return this.queue;
 	}	
 	
-	private void job_submit(int num){
+	public void job_submit(int num){
 		
 		int runningJobs = getRunninJobs();
 		int availSlots = getAvailableSlots();
-		int requestJobs = num;
+		int runninVMs = getRunningVms();
+		int totalAvailableVMs = getTotalAvailableVMs();
+		int idleVMs = getIdleVMs();
+		
+		
+		int remainJob = num;
+		int sendCnt = 0;
 //		int remainJobs = ;
 
 		//1.  큐에 Job 모두 넣기 
@@ -43,30 +49,50 @@ public class tiny_vCluster {
 //			API.jobSubmit(String.format("job%3d", i));			
 //		}
 		for (int i = 0; i < num; i++) {
-			if (!jobQueue.isFull()) {
-				System.out.println("큐가 가득 찼습니다. "+i+"개 job이 큐에 들어갔습니다. ");
+			if (jobQueue.isFull()) {
+				System.out.println("큐가 가득 찼습니다. ");
 				break;
 			}
 			jobQueue.enQueue(String.format("%d.job", cnt++));			
 		}		
 		
-		//2. avail list 대로 찾아서  job 수행하기 모두 수행 
-		
-		while (!jobQueue.isEmpty()) {
-						
-			if (getAvailableSlots() > 0) {
-				API.jobSubmit(jobQueue.deQueue());				
-			}else { //가능한 슬롯이 없으면 vm 을 생성 한다. 
-				if (getRunningVms() < getTotalAvailableVMs()) {
-					//vm 하나씩 생성 
-					createVM();
-				}
-			}
+		//2. avail list 대로 찾아서  job 수행하기 모두 수행		
+		while (!jobQueue.isEmpty()) {	
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 			
-		}
+			if (idleVMs > remainJob) {
+				API.jobSubmit(jobQueue.deQueue());
+				remainJob--;
+			}else { 
+				// 남은 Job이 생성가능한 vm보다 크면
 				
+ 
+
+					// 가능한 슬롯이 10개보다 많으면 VM생성
+					if (availSlots > 10) {
+						
+						for (int i = 0; i < 10; i++) {
+							createVM();
+						}
+					}else {
+						// 10개보다 작으면, host를 하나 더 생성한다.
+						turnOnHostMachine();
+					}
+
+					// 값 다시 읽기 
+					availSlots = getAvailableSlots();
+					idleVMs = getIdleVMs();					
+				
+			}			
+		}		
 	}
-	
+	private void turnOnHostMachine(){
+		if (API.turnOnHostMachine("-").equals("1")) {
+			System.out.println("host turn on");
+		}else {
+			System.out.println("fail");
+		}
+	}
 	private void createVM(){
 		API.createNewVirtualMachine("-");
 	}
@@ -85,11 +111,14 @@ public class tiny_vCluster {
 	private int getRunningVms(){
 		return API.getRunningVmList("-").size();
 	}
+	private int getIdleVMs(){
+		return API.getIdleVmList("-").size();
+	}
 	
 	
-	
+	/*
 	public static void main(String[] args) {
-		Queue q = new Queue(5);
+		JobQueue q = new JobQueue(5);
 		q.enQueue("a");
 		q.enQueue("b");
 		q.enQueue("c");
@@ -103,11 +132,11 @@ public class tiny_vCluster {
 			
 		}
 	}
-		
+	*/
 	
 }
 
-class Queue {
+class JobQueue {
 	private int size=0;
 	private int front;
 	private int rear;
@@ -115,10 +144,10 @@ class Queue {
 	private String queue[] = null;
 	private int cnt=0;
 	
-	public Queue() {
+	public JobQueue() {
 		// TODO Auto-generated constructor stub		
 	}
-	public Queue(int size){
+	public JobQueue(int size){
 		this.size = size;	
 		queue = new String[size];
 		

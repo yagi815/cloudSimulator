@@ -588,12 +588,12 @@ public class API_vcluster {
 	//									tiny_vCluster  for jobQueue
 	//-------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------	
-	
+/*	
 	private static int maxQueue=1000;;
 	private static int queue=0;
 	private static int running;
 	private static int cnt=0;
-	private Queue jobQueue = new Queue(maxQueue);
+//	private JobQueue jobQueue = new JobQueue(maxQueue);
 	
 	private void _job_submit(int num){		
 		int runningJobs = _getRunninJobs();
@@ -652,11 +652,12 @@ public class API_vcluster {
 		return getRunningVmList("-").size();
 	}
 	
-
+*/
+	
 }
 // -------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------
-
+/*
 class JobQueue {
 	
 	private int size=0;
@@ -742,6 +743,6 @@ class JobQueue {
 	
 	
 }
-
+*/
 // -------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------

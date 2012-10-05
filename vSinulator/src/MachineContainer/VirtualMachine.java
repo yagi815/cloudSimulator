@@ -35,7 +35,7 @@ public class VirtualMachine implements Runnable{
 	private String OS_BITS = "x86_64";
 	private String KERNEL = "2.6.18-308.11.1.el5";
 	
-	
+	private int jobRunningTime=0;
 	
 	private final int SECOND = 1000;
 	private boolean IS_EXIT = true;
@@ -96,6 +96,7 @@ public class VirtualMachine implements Runnable{
 			}
 			
 			
+			
 			// 1초 마다 상태 확인 
 			try {Thread.sleep(1000);} catch (Exception e) {}
 		}
@@ -103,13 +104,23 @@ public class VirtualMachine implements Runnable{
 	}
 
 
-	public String executeJob(String jobName, int time){		
-		setVmBusy("Busy");
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {			e.printStackTrace();		}
-		setVmBusy("idle");
-		return "job "+jobName+" is done.";
+	public void executeJob(final String jobName, final int jobRunningTime){		
+		
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				setVmBusy("busy");
+				setJobName(jobName);
+				try {Thread.sleep(jobRunningTime);} catch (InterruptedException e) { e.printStackTrace();}
+				setVmBusy("idle");
+				System.out.println( "job "+jobName+" is done.");				
+			}
+		}).start();
+		
+		
 	}
 		
 	//=================    get,set method =========================	

@@ -262,13 +262,12 @@ public class HostMachine {
 		return failList;
 	}
 	
-	public synchronized void setBusyVM(String jobName){
+	public synchronized void submitJob(String jobName, int jobRunninTime){
 		for (int i = 0; i < virtualMachineList.size(); i++) {
 			VirtualMachine vm = (VirtualMachine)virtualMachineList.get(i);
 			
 			if (!vm.getVmName().equals("host01-master") &&vm.getVmBusy().equals("idle")) {
-				vm.setVmBusy("busy");
-				vm.setJobName(jobName);
+				vm.executeJob(jobName, jobRunninTime);
 				break;
 			}
 		}

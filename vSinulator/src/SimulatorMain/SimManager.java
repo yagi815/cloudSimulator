@@ -81,6 +81,7 @@ public class SimManager implements Runnable {
 		pendingTime = policyReader.getPendingTime();
 		prologTime = policyReader.getPrologTime();
 		shutdownTime = policyReader.getShutdownTime();
+		
 
 
 		System.out.println("Policy Reading...... complete.");
@@ -225,10 +226,20 @@ public class SimManager implements Runnable {
 	 * 
 	 */
 	public String turnOnHostMachine(String hostMachine) {
-		for (int i = 0; i < mainHostContainer.length; i++) {
-			if (mainHostContainer[i].getHostName().equals(hostMachine)) {
-				mainHostContainer[i].setHostPower("on");
-				return "1";
+		
+		if (hostMachine.equals("-")) {
+			for (int i = 0; i < mainHostContainer.length; i++) {
+				if (mainHostContainer[i].getHostPower().equals("off")) {
+					mainHostContainer[i].setHostPower("on");
+					return "1";
+				}
+			}
+		}else{		
+			for (int i = 0; i < mainHostContainer.length; i++) {
+				if (mainHostContainer[i].getHostName().equals(hostMachine)) {
+					mainHostContainer[i].setHostPower("on");
+					return "1";
+				}
 			}
 		}
 		return "-1";
@@ -312,6 +323,7 @@ public class SimManager implements Runnable {
 			if (alist == null) {
 				return "-1";
 			}
+//			System.out.println("==="+alist);
 			String createVmName = (String) alist.get(0);		
 			String[] tmp = new String[2];
 			tmp = createVmName.split("[-]");
@@ -834,7 +846,7 @@ public class SimManager implements Runnable {
 		String[] tmp = virtualMachine.split("[-]");
 		if (isContainVirtualMachine(virtualMachine)) {
 			host = mainHostContainer[getHostIndex(tmp[0])];
-			host.setBusyVM(jobName);
+			host.submitJob(jobName,this.jobRunningTime);
 			return "1";
 		}
 		return "-1";		

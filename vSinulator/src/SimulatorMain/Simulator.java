@@ -1,13 +1,13 @@
 package SimulatorMain;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 
 /**
  * <pre>
@@ -24,95 +24,92 @@ import java.net.Socket;
  * @Version:
  * 
  */
-public class Simulator implements Runnable {
-	
+public class Simulator {
+
 	private static final int PORT = 7878;
 
-	
 	private ServerSocket serverSocket = null;
 	private Socket socket = null;
-	private BufferedReader bufferedReader = null;	
-	private String receiveString = null;
-
-	private PrintWriter printdWriter = null;	
-	private Object resultObj = null;
 	
-
-	
-	private static ExecuteCommand executeCommand= null;
+	private ExecuteCommand executeCommand = null;
 	private static SimManager simManager = null;
 	
 	
-	
-	
-	
-	
-	
+
 	public Simulator() {
-		// TODO Auto-generated constructor stub		
+		
+		
+		ProcessRequestThread process = null;
 		executeCommand = new ExecuteCommand();
 		
 		
-		Thread t = new Thread(this);
-		t.start();
-	}
-	
-	
+		try {
+			serverSocket = new ServerSocket(PORT);
 
-	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		 ObjectOutputStream oos=null;
-		 
-		while (true) {
-
-			try {
+			while (true) {
 
 				System.out.println("waiting client...");
-				serverSocket = new ServerSocket(PORT);
 				socket = serverSocket.accept();
-				bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				receiveString = bufferedReader.readLine();
-				
-				
 
-				System.out.println("receiveString > "+receiveString);
-				resultObj = executeCommand.execute(receiveString);
-				
+				process = new ProcessRequestThread(socket, executeCommand);
+				process.start();
 
-
-				
-				
-				
-				 oos = new ObjectOutputStream(socket.getOutputStream());
-                 oos.writeObject(resultObj);
-                 oos.flush();    
-                 
-				
-				receiveString = "";
-				resultObj = null;
-				bufferedReader.close();
-//				printdWriter.close();
-				oos.close();
-				socket.close();
-				serverSocket.close();
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				System.out.println(e.toString());
 			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
 		}
 	}
+
+	public static void main(String[] args) {
+		new Simulator();
+	}
+}
+
+
+class ProcessRequestThread extends Thread{
+	private Socket socket = null;
+	private BufferedReader bufferedReader = null;
+	private String receiveString = null;
+	private PrintWriter printdWriter = null;
+	private Object resultObj = null;
+	private ObjectOutputStream oos = null;
+	private ExecuteCommand executeCommand = null;
 	
 	
+	
+	public ProcessRequestThread(Socket s, ExecuteCommand executeCommand) {
 		
-	
-	
-	public static void main(String[] args) {	
-		new Simulator();		
-//		simManager.initSimulator();		
-//		Simulator simulator = new Simulator();
 		
-	}	
+		this.socket = s;
+		this.executeCommand = executeCommand;
+		
+		try {
+			// in
+			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));			
+			// out
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	public void run(){
+		
+		try {
+			receiveString = bufferedReader.readLine();		
+			System.out.println("receiveString > "+receiveString);
+			resultObj = executeCommand.execute(receiveString);
+			
+            oos.writeObject(resultObj);
+            oos.flush();   
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
