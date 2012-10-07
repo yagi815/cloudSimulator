@@ -1,12 +1,16 @@
 package API;
 
+import java.util.List;
+
+
+
 public class tiny_vCluster {
 	
 	
 	private static int maxQueue=1000;;
 	private static int queue=0;
 	private static int running;
-	private static int cnt=0;
+	private static int cnt=1;
 	
 	
 	private API_vcluster API;
@@ -14,22 +18,57 @@ public class tiny_vCluster {
 	
 	
 	
-	public tiny_vCluster() {
-		// TODO Auto-generated constructor stub
+	public tiny_vCluster() {	
 		API	 = new API_vcluster();
 		jobQueue = new JobQueue(maxQueue);
 	}
-	
-	
-	
-	
-
 	private int getMaxQueue(){
 		return this.maxQueue;		
 	}
 	private int getQueue(){
 		return this.queue;
 	}	
+	
+	
+	
+	
+	
+	public void reductionResorce(){
+		//1분마다 검사해서 필요 없는 머신 끈다.
+		//vm먼저 끄기,
+		//running 중이 vm이 하나도 없는 머신은 호스트 전원끄기
+		
+		new Thread(new Runnable() {
+			
+			boolean IS_EXIT=false;
+			List runningHost=null;
+			
+			
+			@Override
+			public void run() {
+				
+				while (!IS_EXIT){
+					
+					try {Thread.sleep(60000);} catch (InterruptedException e) {e.printStackTrace();}
+					
+					runningHost = API.getRunningHostList();
+					
+					for (int i = 0; i < runningHost.size(); i++) {
+						if(API.getRunningVmList((String)runningHost.get(i)).size() ==0 ){
+							API.turnOffHostMachine((String)runningHost.get(i));
+						}
+					}
+					
+					
+				}
+
+				
+			}
+		}).start();
+		
+	}
+	
+	
 	
 	public void job_submit(int num){
 		
@@ -53,12 +92,12 @@ public class tiny_vCluster {
 				System.out.println("큐가 가득 찼습니다. ");
 				break;
 			}
-			jobQueue.enQueue(String.format("%d.job", cnt++));			
+			jobQueue.enQueue(String.format("%10d.job", cnt++));			
 		}		
 		
 		//2. avail list 대로 찾아서  job 수행하기 모두 수행		
 		while (!jobQueue.isEmpty()) {	
-			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 			
 			if (idleVMs > remainJob) {
 				API.jobSubmit(jobQueue.deQueue());

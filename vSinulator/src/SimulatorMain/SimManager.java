@@ -258,6 +258,7 @@ public class SimManager implements Runnable {
 		for (int i = 0; i < mainHostContainer.length; i++) {
 			if (mainHostContainer[i].getHostName().equals(hostMachine)) {
 				mainHostContainer[i].setHostPower("off");
+				mainHostContainer[i].removeAllVM();
 				return "1";
 			}
 		}

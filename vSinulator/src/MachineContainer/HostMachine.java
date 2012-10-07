@@ -81,6 +81,11 @@ public class HostMachine {
 		}
 	}
 
+	public synchronized void removeAllVM(){
+		for (int i = 0; i < virtualMachineList.size(); i++) {			
+			virtualMachineList.remove(i);
+		}
+	}
 	
 	private synchronized VirtualMachine getVM(String virtualMachine) {
 		for (int i = 0; i < virtualMachineList.size(); i++) {

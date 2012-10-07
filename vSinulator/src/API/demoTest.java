@@ -27,7 +27,7 @@ public class demoTest {
 	
 	public demoTest() {
 		// TODO Auto-generated constructor stub
-		api_android = new API_android();	
+//		api_android = new API_android();	
 		api_vcluster = new API_vcluster();	
 		vCluster = new tiny_vCluster();
 	}		
@@ -54,18 +54,32 @@ public class demoTest {
 		final int randomNumber = 0;
 		int totalJobs=0;	
 		
-		while (true) {
-			api_vcluster.showCloud();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
-		
+		new Thread(new Runnable() {
 			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while (true) {
+					api_vcluster.showCloud();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}).start();
+		
+		
+		for (int i = 0; i < 3; i++) {
+			vCluster.job_submit(50*i); // 10초에 한번씩
+			System.out.println(50*i+"개 job is submitted.");
+			try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+					
 	}
 	
 	//------------------------------------------------------------------	
@@ -74,10 +88,4 @@ public class demoTest {
 		demo.demoStart();
 	}
 }
-class jobSubmitter{
-	public jobSubmitter() {
-		// TODO Auto-generated constructor stub
-	}
-	public void sumbmit(){		
-	}
-}
+

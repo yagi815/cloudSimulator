@@ -55,6 +55,7 @@ public class demoTest_old {
 		
 		
 		
+		
 		new Thread(new Runnable() {
 			
 			@Override
@@ -74,15 +75,14 @@ public class demoTest_old {
 		
 		
 		
-		
+		vCluster.reductionResorce(); // 리소스 정리 60초 마다 검사해서 정리 한다. 
 			
 		while (IS_TRUE) {			
 			
 			randomNumber = random.nextInt(10);			
 			
 			
-			if (totalJobs < 200) {
-				
+			if (totalJobs < 200) {				
 				vCluster.job_submit(randomNumber+20); // 10초에 한번씩
 				System.out.println(randomNumber+20+" jobs are submitted.");
 				totalJobs += randomNumber+20;
