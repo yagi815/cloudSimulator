@@ -840,15 +840,17 @@ public class SimManager implements Runnable {
 	 */
 	public String jobSubmit(String jobName){
 		List list = getIdleVmList("-");
- 		String virtualMachine = (String)list.get(0);
- 		
- 		
- 		HostMachine host;
-		String[] tmp = virtualMachine.split("[-]");
-		if (isContainVirtualMachine(virtualMachine)) {
-			host = mainHostContainer[getHostIndex(tmp[0])];
-			host.submitJob(jobName,this.jobRunningTime);
-			return "1";
+		if (list != null) {
+
+			String virtualMachine = (String) list.get(0);
+
+			HostMachine host;
+			String[] tmp = virtualMachine.split("[-]");
+			if (isContainVirtualMachine(virtualMachine)) {
+				host = mainHostContainer[getHostIndex(tmp[0])];
+				host.submitJob(jobName, this.jobRunningTime);
+				return "1";
+			}
 		}
 		return "-1";		
 	}

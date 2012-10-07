@@ -35,8 +35,8 @@ import javax.swing.text.AbstractDocument.BranchElement;
 public class API_vcluster {
 
 	private static final int PORT = 7878;
-//	private static final String IP_ADDR = "127.0.0.1";
-	 private static final String IP_ADDR = "150.183.234.168";
+	private static final String IP_ADDR = "127.0.0.1";
+//	 private static final String IP_ADDR = "150.183.234.168";
 	private static InetAddress inetAddress = null;
 	private static Socket socket = null;
 
@@ -562,11 +562,12 @@ public class API_vcluster {
 	 * 
 	 */
 	public void showCloud() {
-		System.out.println("dumpCloudStatus....");
+//		System.out.println("dumpCloudStatus....");
 		String dumpCloudStatsus = "";
 
 		dumpCloudStatsus += "====================================================================\n"
-				+ "total VMs :"
+			+ "running Hosts :" + getRunningHostList()
+				+ "\ntotal VMs :"
 				+ getTotalVMs()
 				+ "\n running Vms :"
 				+ getRunningVmList("-").size()

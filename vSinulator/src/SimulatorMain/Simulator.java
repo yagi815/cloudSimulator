@@ -48,7 +48,7 @@ public class Simulator {
 
 			while (true) {
 
-				System.out.println("waiting client...");
+//				System.out.println("waiting client...");
 				socket = serverSocket.accept();
 
 				process = new ProcessRequestThread(socket, executeCommand);

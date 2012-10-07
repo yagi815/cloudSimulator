@@ -74,6 +74,9 @@ public class demoTest {
 		}).start();
 		
 		
+		vCluster.reductionResorce(); // 리소스 정리 60초 마다 검사해서 정리 한다.
+		
+		
 		for (int i = 0; i < 3; i++) {
 			vCluster.job_submit(50*i); // 10초에 한번씩
 			System.out.println(50*i+"개 job is submitted.");

@@ -50,19 +50,18 @@ public class tiny_vCluster {
 				while (!IS_EXIT){
 					
 					try {Thread.sleep(60000);} catch (InterruptedException e) {e.printStackTrace();}
-					
+					System.out.println("reductionResource");
 					runningHost = API.getRunningHostList();
 					
-					for (int i = 0; i < runningHost.size(); i++) {
-						if(API.getRunningVmList((String)runningHost.get(i)).size() ==0 ){
-							API.turnOffHostMachine((String)runningHost.get(i));
-						}
+					for (int i = 1; i < runningHost.size(); i++) {
+						String hostName = (String)runningHost.get(i);
+						if(API.getBusyVmList(hostName).size() ==0 ){
+							API.turnOffHostMachine(hostName);
+							System.out.println(hostName+" is off");
+						}						
+						
 					}
-					
-					
-				}
-
-				
+				}				
 			}
 		}).start();
 		
@@ -97,7 +96,7 @@ public class tiny_vCluster {
 		
 		//2. avail list 대로 찾아서  job 수행하기 모두 수행		
 		while (!jobQueue.isEmpty()) {	
-			try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+//			try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 			
 			if (idleVMs > remainJob) {
 				API.jobSubmit(jobQueue.deQueue());

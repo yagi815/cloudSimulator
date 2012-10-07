@@ -75,7 +75,7 @@ public class demoTest_old {
 		
 		
 		
-		vCluster.reductionResorce(); // 리소스 정리 60초 마다 검사해서 정리 한다. 
+		 
 			
 		while (IS_TRUE) {			
 			
