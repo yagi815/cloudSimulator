@@ -28,7 +28,7 @@ public class Test_vcluster_tempActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 //				text1.setText("hello \n");
-				text1.append("hello \n");
+				text1.append("hello- \n");
 				Log.d("btn1", "btn1 is clicked.");
 				
 			}
