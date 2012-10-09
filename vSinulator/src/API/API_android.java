@@ -27,13 +27,13 @@ public class API_android {
 
 	
 	private API_vcluster API = null;
-//	private tiny_vCluster  vCluster = null;
+	private tiny_vCluster  t_vCluster = null;
 	
 
 	public API_android() {
 		// TODO Auto-generated constructor stub
 		API = new API_vcluster();
-//		vCluster = new tiny_vCluster();
+		t_vCluster = new tiny_vCluster();
 	}
 
 	// ******************************************************************
@@ -171,6 +171,22 @@ public class API_android {
 		list.add("Belle_OS_Image");
 		list.add("Ligo_OS_Image");
 		return list;
+	}	
+	/**
+	 * Desc : 데모 동작
+	 * @Method Name : demoStart
+	 * 
+	 */
+	public void demoStart(){
+		t_vCluster.demoStart();
+	}
+	/**
+	 * Desc : 데모 정지
+	 * @Method Name : demoStop
+	 * 
+	 */
+	public void demoStop(){
+		t_vCluster.demoStop();
 	}
 
 
