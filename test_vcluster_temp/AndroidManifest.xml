@@ -11,7 +11,7 @@
         android:label="@string/app_name" >
         <activity
             android:label="@string/app_name"
-            android:name=".Test_vcluster_tempActivity" >
+            android:name="kisti.kisti.vSimulator.demoTest.Test_vcluster_tempActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
