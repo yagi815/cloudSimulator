@@ -22,9 +22,11 @@ public class Test_vcluster_tempActivity extends Activity {
         
 //        Button btn1 = (Button)findViewById(R.id.btn1);
 //
-//        final TextView text1 = (TextView)findViewById(R.id.text1);
-//        
-//        
+        final TextView text1 = (TextView)findViewById(R.id.txt1);
+
+        
+        
+        
 //        btn1.setOnClickListener(new OnClickListener() {			
 //			public void onClick(View v) {
 //
