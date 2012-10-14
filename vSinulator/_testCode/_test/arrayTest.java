@@ -47,13 +47,3 @@ public class arrayTest {
 
 }
 
-class testClass{
-	public testClass() {
-		// TODO Auto-generated constructor stub
-	}
-	public void pri(){
-		
-		System.out.println("hello");
-	}
-
-}

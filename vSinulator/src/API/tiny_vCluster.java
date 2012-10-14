@@ -3,6 +3,8 @@ package API;
 import java.util.List;
 import java.util.Random;
 
+import SimulatorMain.Simulator;
+
 
 
 public class tiny_vCluster {
@@ -50,6 +52,13 @@ public class tiny_vCluster {
 		 * 
 		 * 추가로 fail모듈 생성해서 vm 죽이고, 새로운 멋힌에 Job 이동시켜 수행한다. 
 		 */
+		
+		
+		
+		
+		
+		
+		
 		
 		final Random random = new Random();
 		final int randomNumber = 0;

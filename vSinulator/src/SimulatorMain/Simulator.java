@@ -38,6 +38,7 @@ public class Simulator {
 
 	public Simulator() {
 		
+		System.out.println("Simulator Start");
 		
 		ProcessRequestThread process = null;
 		executeCommand = new ExecuteCommand();

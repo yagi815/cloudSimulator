@@ -6,6 +6,10 @@ import java.util.Random;
 
 import javax.swing.text.AbstractDocument.BranchElement;
 
+import SimulatorMain.Simulator;
+
+import messageQueueTest.simulator;
+
 
 /**
  * <pre>
@@ -188,6 +192,16 @@ public class API_android {
 	public void demoStop(){
 		t_vCluster.demoStop();
 	}
+	/**
+	 * Desc :  simulator start
+	 * @Method Name : SimulatorStart
+	 * 
+	 */
+	public void simulatorStart(){
+		new Simulator();
+	}
+	
+	
 
 
 }

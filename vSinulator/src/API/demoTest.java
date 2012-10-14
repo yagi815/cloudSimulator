@@ -3,6 +3,8 @@ package API;
 import java.util.Iterator;
 import java.util.Random;
 
+import SimulatorMain.Simulator;
+
 /**
  * <pre>
  * API
@@ -50,9 +52,17 @@ public class demoTest {
 		 * 추가로 fail모듈 생성해서 vm 죽이고, 새로운 멋힌에 Job 이동시켜 수행한다. 
 		 */
 		
+		
+		
+		
+		
+		
+		
 		final Random random = new Random();
 		final int randomNumber = 0;
 		int totalJobs=0;	
+		
+		
 		
 		
 		new Thread(new Runnable() {
@@ -86,9 +96,17 @@ public class demoTest {
 	}
 	
 	//------------------------------------------------------------------	
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+		
+//		new Simulator();
+		
+		
+		
 		demoTest demo = new demoTest();
+		
+		
 		demo.demoStart();
+		
 	}
 }
 
